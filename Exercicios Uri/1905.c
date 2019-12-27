@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #define size 5
-// o exercicio esta com a logica correta, porem o return da função walk nao funciona
-// https://pt.stackoverflow.com/questions/428354/comando-return-n%c3%a3o-funciona
 
-int walk(int m[size][size], int j, int k);
+void walk(int m[size][size], int j, int k);
+
+int win = 0;
 
 int main()
 {
@@ -26,9 +26,9 @@ int main()
         k = 0;
         j = 0;
 
-        r = walk(m, j, k);
+        walk(m, j, k);
 
-        if ( r == 1)
+        if ( win == 1)
         {
             printf("COPS\n");
         }
@@ -36,40 +36,48 @@ int main()
         {
             printf("ROBBERS\n");
         }
+        win = 0;
     }
     return 0;
 }
 
-int walk(int m[size][size], int j, int k)
-{
-    m[j][k]--;
-    int x = 0, y = 0, z = 0, w = 0;
 
-    if ( j == 4 && k == 4)
+void walk(int m[size][size], int j, int k)
+{
+    if ( win == 0 && m[0][0] >= -2)
     {
-        return 1;
-    }
-    else
-    {
-        for ( x = m[j+1][k], y = m[j-1][k], z = m[j][k+1], w = m[j][k-1]; x <= 0 || y <= 0 || z <= 0 || w <= 0; x++, y++, z++, w++)
+        int x = 0, y = 0, z = 0, w = 0;
+        m[j][k]--;
+    
+        if ( j == 4 && k == 4)
         {
-            if ( x == 0 && j + 1 < size)
+            win = 1;
+        }
+        else
+        { 
+            if ( j < size && k < size && j >= 0 && k >= 0)
             {
-                walk(m, j+1, k);
-            }
-            if ( y == 0 && j - 1 >= 0)
-            {
-                walk(m, j-1, k);
-            }
-            if ( z == 0 && k + 1 < size)
-            {
-                walk(m, j, k+1);
-            }
-            if ( w == 0 && k - 1 >= 0)
-            {
-                walk(m, j, k-1);
+                for ( x = m[j+1][k], y = m[j-1][k], z = m[j][k+1], w = m[j][k-1]; x <= 0 || y <= 0 || z <= 0 || w <= 0; x++, y++, z++, w++)
+                {
+                    if ( x == 0 && j + 1 < size)
+                    {
+                        walk(m, j+1, k);
+                    }
+                    if ( y == 0 && j - 1 >= 0)
+                    {
+                        walk(m, j-1, k);
+                    }
+                    if ( z == 0 && k + 1 < size)
+                    {
+                        walk(m, j, k+1);
+                    }
+                    if ( w == 0 && k - 1 >= 0)
+                    {
+                        walk(m, j, k-1);
+                    }
+                }
             }
         }
     }
-    return 2;
 }
+
